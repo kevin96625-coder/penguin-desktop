@@ -1,0 +1,274 @@
+/**
+ * PenguinHarness design tokens — Stage 3.
+ *
+ * Source of truth: docs/visual-memory/LiveAgent-Visual-Memory.md
+ *   §2.1 color tables (copied verbatim, HSL triplets, use as hsl(var(--token)))
+ *   §2.4 shadow recipes (encoded as CSS variables, light/dark pairs)
+ *   §3   6px global scrollbar
+ * Upgrades allowed by the stage-3 brief only:
+ *   §7.4 surface ladder (--surface-canvas … --surface-modal)
+ */
+
+:root {
+  /* ---- §2.1 light palette (verbatim) ---- */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --sidebar-bg: 220 14% 96%;
+  --hub-canvas: var(--background);
+  --chip-bg: 220 13% 91%;
+  --chip-bg-hover: 220 13% 86%;
+  --send-disabled-bg: 220 13% 91%;
+
+  --chat-user-bg: 220 9% 91%;
+  --chat-user-fg: 222 84% 5%;
+  --chat-assistant-bg: 0 0% 100%;
+  --chat-assistant-fg: 222.2 84% 4.9%;
+  --chat-tool-bg: 0 0% 100%;
+  --chat-tool-border: 220 13% 91%;
+  --chat-thinking-bg: 220 14% 97%;
+  --chat-thinking-border: 220 13% 90%;
+  --chat-success: 152 60% 42%;
+  --chat-error: 0 72% 51%;
+  --chat-running: 252 56% 57%;
+
+  --tool-card-bg: 0 0% 100% / 0.72;
+  --tool-card-border: 0 0% 0% / 0.06;
+  --tool-bash-accent: 142 70% 45%;
+  --tool-file-accent: 220 70% 55%;
+  --tool-search-accent: 38 92% 50%;
+  --tool-list-accent: 262 52% 56%;
+
+  --checkpoint-accent: 220 9% 46%;
+  --checkpoint-bg: 0 0% 100% / 0.72;
+  --checkpoint-border: 0 0% 0% / 0.06;
+  --checkpoint-icon-bg: 220 10% 95%;
+  --checkpoint-icon-fg: 220 9% 46%;
+
+  /* ---- §2.3 base radius ---- */
+  --radius: 0.5rem;
+
+  /*
+   * ---- §7.4 surface ladder (light) — stage-3 upgrade ----
+   * In light mode elevation is carried by shadow + rim, not lightness, so the
+   * ladder converges back to white at the top. Values derived from the
+   * background / sidebar-bg / chat-thinking-bg family — no new hues.
+   *   canvas : main work canvas behind everything (== --background)
+   *   panel  : recessed structural planes — sidebar, chart wells (== --sidebar-bg)
+   *   raised : slightly lifted rows/wells inside a panel (== chat-thinking family)
+   *   focus  : the current actionable object; pair with glass + --shadow-composer
+   *   modal  : topmost layer, dialogs; pair with --shadow-modal
+   */
+  --surface-canvas: 0 0% 100%;
+  --surface-panel: 220 14% 96%;
+  --surface-raised: 220 14% 97.5%;
+  --surface-focus: 0 0% 100%;
+  --surface-modal: 0 0% 100%;
+
+  /*
+   * ---- §2.4 shadow recipes as variables ----
+   * rim   : 1px inner top light — the "edge highlight" used everywhere
+   * sm    : panel-level 1-2px shadow, stacked on a rim
+   * composer / composer-focus : the glass focus card (§5)
+   * popover : menus / dropdowns
+   * modal   : large dialogs, rim + 80px throw
+   */
+  --shadow-rim: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 1px 2px hsl(0 0% 0% / 0.04);
+  --shadow-composer: 0 12px 40px -14px rgb(15 23 42 / 0.22),
+    0 2px 6px -2px rgb(15 23 42 / 0.08);
+  --shadow-composer-focus: 0 16px 46px -14px rgb(15 23 42 / 0.26),
+    0 4px 12px -4px rgb(15 23 42 / 0.1);
+  --shadow-popover: 0 12px 40px -12px rgb(0 0 0 / 0.25);
+  --shadow-modal: inset 0 1px 0 rgb(255 255 255 / 0.7),
+    0 32px 80px -24px rgb(0 0 0 / 0.35);
+}
+
+.dark {
+  /* ---- §2.1 dark palette (verbatim) ---- */
+  --background: 224 22% 9%;
+  --foreground: 210 30% 96%;
+  --card: 224 22% 10%;
+  --card-foreground: 210 30% 96%;
+  --popover: 224 20% 12%;
+  --popover-foreground: 210 30% 96%;
+  --primary: 210 30% 96%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 220 18% 17%;
+  --secondary-foreground: 210 30% 96%;
+  --muted: 220 18% 17%;
+  --muted-foreground: 215 18% 76%;
+  --accent: 220 18% 17%;
+  --accent-foreground: 210 30% 96%;
+  --destructive: 0 62.8% 36%;
+  --destructive-foreground: 210 30% 96%;
+  --border: 220 14% 26%;
+  --input: 220 14% 26%;
+  --ring: 212.7 26.8% 83.9%;
+  --sidebar-bg: 224 22% 11%;
+  --hub-canvas: 224 24% 6.5%;
+  --chip-bg: 220 16% 24%;
+  --chip-bg-hover: 220 16% 30%;
+  --send-disabled-bg: 220 16% 24%;
+
+  --chat-user-bg: 220 14% 28%;
+  --chat-user-fg: 210 30% 96%;
+  --chat-assistant-bg: 224 22% 9%;
+  --chat-assistant-fg: 210 30% 96%;
+  --chat-tool-bg: 224 22% 9%;
+  --chat-tool-border: 220 14% 24%;
+  --chat-thinking-bg: 220 18% 13%;
+  --chat-thinking-border: 220 14% 22%;
+  --chat-success: 152 56% 52%;
+  --chat-error: 0 75% 65%;
+  --chat-running: 252 60% 70%;
+
+  --tool-card-bg: 0 0% 100% / 0.08;
+  --tool-card-border: 0 0% 100% / 0.14;
+  --tool-bash-accent: 142 60% 62%;
+  --tool-file-accent: 220 70% 72%;
+  --tool-search-accent: 38 90% 66%;
+  --tool-list-accent: 262 60% 74%;
+
+  --checkpoint-accent: 220 12% 78%;
+  --checkpoint-bg: 0 0% 100% / 0.08;
+  --checkpoint-border: 0 0% 100% / 0.14;
+  --checkpoint-icon-bg: 220 12% 22%;
+  --checkpoint-icon-fg: 220 14% 76%;
+
+  /*
+   * ---- §7.4 surface ladder (dark) — stage-3 upgrade ----
+   * Climbs from --background (224 22% 9%) in 3–4% lightness steps, with a
+   * gentle desaturation as surfaces rise toward the viewer (higher = closer to
+   * "lit" glass, less colored). This is the deliberate fix for LiveAgent's
+   * 9–28% everything-looks-the-same band.
+   *   canvas : 9%   — root canvas (== --background)
+   *   panel  : 12%  — sidebar / structural panels (sits by --sidebar-bg at 11%)
+   *   raised : 15%  — list rows, wells, thinking blocks that need separation
+   *   focus  : 19%  — current actionable object (also glass white/[0.06] lives here)
+   *   modal  : 22.5% — topmost dialogs; brightest opaque surface in the app
+   */
+  --surface-canvas: 224 22% 9%;
+  --surface-panel: 224 21% 12%;
+  --surface-raised: 223 20% 15%;
+  --surface-focus: 222 19% 19%;
+  --surface-modal: 222 18% 22.5%;
+
+  /* ---- §2.4 dark shadow recipes: black absorbs the throw, white rims define edges ---- */
+  --shadow-rim: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-composer: 0 12px 40px -14px rgb(0 0 0 / 0.72),
+    0 2px 6px -2px rgb(0 0 0 / 0.42);
+  /* dark focus is carried by border/background alpha rising, not a bigger shadow */
+  --shadow-composer-focus: 0 12px 40px -14px rgb(0 0 0 / 0.72),
+    0 2px 6px -2px rgb(0 0 0 / 0.42);
+  --shadow-popover: 0 12px 40px -12px rgb(0 0 0 / 0.6);
+  --shadow-modal: inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 32px 80px -24px rgb(0 0 0 / 0.7);
+}
+
+/*
+ * Tailwind 4 wiring: expose semantic tokens as utilities (bg-background,
+ * border-border, bg-surface-raised, shadow-composer, font-mono …).
+ * `inline` keeps hsl(var(--token)) resolving against the nearest .dark scope.
+ */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar: hsl(var(--sidebar-bg));
+
+  --color-surface-canvas: hsl(var(--surface-canvas));
+  --color-surface-panel: hsl(var(--surface-panel));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-surface-focus: hsl(var(--surface-focus));
+  --color-surface-modal: hsl(var(--surface-modal));
+
+  --shadow-rim: var(--shadow-rim);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-composer: var(--shadow-composer);
+  --shadow-composer-focus: var(--shadow-composer-focus);
+  --shadow-popover: var(--shadow-popover);
+  --shadow-modal: var(--shadow-modal);
+
+  /* §2.2 font stacks — system UI + PingFang SC; SF Mono for code. OpenAI Sans
+     is deliberately NOT embedded. */
+  --font-sans: ui-sans-serif, system-ui, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, Menlo, Monaco, "Cascadia Code",
+    Consolas, "Liberation Mono", monospace;
+}
+
+/* ---- base surface + native-feel resets ---- */
+html,
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: ui-sans-serif, system-ui, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* LiveAgent kills the WebView default focus ring globally; focus feeling is
+   given back by the container (focus-within glass lift), never a blue ring. */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ---- §3 global scrollbar: 6px, 3px thumb radius, alpha .2 → hover .35 ---- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: hsl(var(--foreground) / 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--foreground) / 0.35);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

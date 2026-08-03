@@ -1,1 +1,5 @@
 @import "tailwindcss";
+@import "./design-system/tokens.css";
+
+/* Class-based dark mode: theme.ts toggles .dark on <html>. */
+@custom-variant dark (&:is(.dark *));
