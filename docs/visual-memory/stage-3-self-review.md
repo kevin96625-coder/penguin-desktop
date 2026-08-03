@@ -91,3 +91,20 @@
 | AppShell + Overview | 布局骨架 + 仪表盘占位（设计系统样板间） |
 | logo | vendor 复制 + tauri icon 全套 |
 | 套皮 | 登录玻璃卡 + Sessions 高密度行 + 路由重排 |
+
+## 四、修补记录
+
+阶段 3 评审后的四处修补（本文件即第四处）：
+
+| 修补 | 内容 | commit |
+| --- | --- | --- |
+| 玻璃抽象 | §5 配方从 LoginPage 内联搬入 `design-system/components/GlassCard.tsx`（composer / focus / panel 三档；类字符串逐字搬运，数值零改动）；`grep backdrop-blur-2xl` 在 features/app 下已无结果 | `a57ee99` |
+| 窗口尺寸 | tauri.conf.json 默认 1400×800，新增 min 1200×720 | `1683631` |
+| 侧栏 logo | AppShell 侧栏顶部 wordmark 左侧加 24×24 penguin-logo.svg（rounded-md，gap-2） | `fb9fbca` |
+
+## 五、开放问题裁决（主会话已裁决，照录）
+
+1. **窗口尺寸**：已按 1400×800（min 1200×720）修改，见上表。
+2. **Overview 英雄位**：不做。留到阶段 4 有真实仪表盘时绑定真实数据实现。
+3. **StatusBadge 状态点**：保留 6px（h-1.5）。可见性优先于教条，不回退 2px。
+4. **侧栏 logo**：已加 24×24，见上表。
