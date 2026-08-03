@@ -241,6 +241,44 @@ fn spawn_ready_watch(app: tauri::AppHandle) {
     });
 }
 
+/// Idempotent server teardown. Safe to call from multiple exit trigger points
+/// (CloseRequested / ExitRequested / Exit): `child.take()` ensures only the
+/// first caller does any work; an adopted (`owned == false`) external server
+/// is never killed. Kills the whole process group (SIGTERM, up to 6s of
+/// try_wait polling, then SIGKILL) — pid == pgid because of process_group(0).
+pub fn cleanup(state: &SharedServerState) {
+    let (child, owned) = {
+        let mut guard = state.lock().unwrap();
+        let owned = guard.owned;
+        (guard.child.take(), owned)
+    };
+    let Some(mut child) = child else {
+        return; // already cleaned up, never spawned, or adopted (child = None)
+    };
+    if !owned {
+        return;
+    }
+
+    let pid = child.id() as libc::pid_t;
+    unsafe {
+        libc::killpg(pid, libc::SIGTERM);
+    }
+
+    // Poll for graceful exit: every 200ms, up to 6s.
+    for _ in 0..30 {
+        match child.try_wait() {
+            Ok(Some(_)) => return,
+            Ok(None) => std::thread::sleep(Duration::from_millis(200)),
+            Err(_) => return,
+        }
+    }
+
+    unsafe {
+        libc::killpg(pid, libc::SIGKILL);
+    }
+    let _ = child.wait();
+}
+
 /// Entry point, called from setup. Adopt precheck -> spawn if needed.
 pub fn start(app: tauri::AppHandle) {
     // Adopt precheck: if anything already answers HTTP on the port, an
