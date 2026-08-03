@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { me } from "../api/endpoints/auth";
 import LoginPage from "../features/auth/LoginPage";
+import OverviewPage from "../features/overview/OverviewPage";
 import SessionsPage from "../features/sessions/SessionsPage";
+import AppShell from "./AppShell";
 
 /** Global 401 handling: any request that hits 401 broadcasts this event (see client.ts). */
 function UnauthorizedListener() {
@@ -39,7 +41,8 @@ function Protected({ children }: { children: ReactNode }) {
       cancelled = true;
     };
   }, [navigate]);
-  if (!ready) return <p className="p-8 text-sm text-gray-500">加载中…</p>;
+  if (!ready)
+    return <p className="p-8 text-sm text-muted-foreground">加载中…</p>;
   return <>{children}</>;
 }
 
@@ -50,13 +53,15 @@ export default function AppRouter() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
-          path="/"
           element={
             <Protected>
-              <SessionsPage />
+              <AppShell />
             </Protected>
           }
-        />
+        >
+          <Route path="/" element={<OverviewPage />} />
+          <Route path="/sessions" element={<SessionsPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
