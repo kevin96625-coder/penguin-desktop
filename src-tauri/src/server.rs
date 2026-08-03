@@ -190,24 +190,81 @@ fn fatal(app: tauri::AppHandle, msg: String) {
     });
 }
 
+/// Last `n` lines of the server log, for failure diagnostics.
+fn log_tail(n: usize) -> String {
+    let Ok(content) = std::fs::read_to_string(log_path()) else {
+        return String::from("(无日志)");
+    };
+    let lines: Vec<&str> = content.lines().collect();
+    let start = lines.len().saturating_sub(n);
+    lines[start..].join("\n")
+}
+
+/// Poll GET http://localhost:7364/ every 100ms, up to 150 attempts; each
+/// attempt has its own ~1s connect/read timeouts (a non-HTTP occupant of the
+/// port would otherwise hang the poll forever). Any HTTP status line (302
+/// included) counts as ready; redirects are not followed. On ready: reload the
+/// main window (its initial load happened before the server was up), then show
+/// and focus it. On timeout: error dialog with the log tail, then exit.
+fn spawn_ready_watch(app: tauri::AppHandle) {
+    tauri::async_runtime::spawn(async move {
+        let mut ready = false;
+        for _ in 0..150 {
+            if probe_http() {
+                ready = true;
+                break;
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+
+        if !ready {
+            let msg = format!(
+                "penguin server 未在预期时间内就绪 (http://localhost:7364)。\n\n\
+                 日志尾部 ({}):\n{}",
+                log_path().display(),
+                log_tail(20)
+            );
+            fatal(app, msg);
+            return;
+        }
+
+        // The window may still be racing app initialization; retry briefly.
+        for _ in 0..50 {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.reload();
+                let _ = window.show();
+                let _ = window.set_focus();
+                return;
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    });
+}
+
 /// Entry point, called from setup. Adopt precheck -> spawn if needed.
 pub fn start(app: tauri::AppHandle) {
     // Adopt precheck: if anything already answers HTTP on the port, an
     // external server is running. Use it, and never kill it on exit.
     if probe_http() {
-        let state = app.state::<SharedServerState>();
-        let mut guard = state.lock().unwrap();
-        guard.child = None;
-        guard.owned = false;
+        {
+            let state = app.state::<SharedServerState>();
+            let mut guard = state.lock().unwrap();
+            guard.child = None;
+            guard.owned = false;
+        }
+        spawn_ready_watch(app);
         return;
     }
 
     match spawn_server() {
         Ok(child) => {
-            let state = app.state::<SharedServerState>();
-            let mut guard = state.lock().unwrap();
-            guard.child = Some(child);
-            guard.owned = true;
+            {
+                let state = app.state::<SharedServerState>();
+                let mut guard = state.lock().unwrap();
+                guard.child = Some(child);
+                guard.owned = true;
+            }
+            spawn_ready_watch(app);
         }
         Err(msg) => fatal(app, msg),
     }
