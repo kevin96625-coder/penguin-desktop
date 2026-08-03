@@ -318,6 +318,7 @@
 
 ## 执行期修订记录
 
+- 2026-08-04 阶段 2：实测确认**不存在全局 `GET /api/sessions` 列表端点**（`app.ts:381` 挂载的 sessions 路由只含 `/:sessionId/*`；列表在 agent 级 `GET /api/projects/:p/agents/:a/sessions`，`sessions.ts:242` 需要两级路径参数）。调研报告 §A3 此处有误。前端已适配为 projects→agents→sessions 三级取数（与阶段 4 的单 project 单例设计一致）。
 - 2026-08-04 阶段 0：实测确认钉住 commit 上 `/api/version` 挂载于 auth 中间件之后（`app.ts:359-362`）——未登录返回 unauthorized 是正确行为。已修订 0.7 预期与阶段 0 验收项 2；对后续无实质影响（就绪探测本就用 `GET /`，前端版本显示本就在登录后）。阶段 1 若需登录前判活，唯一可用信号是 `GET /` 的任意 HTTP 响应。
 
 ## 返修记录（2026-08-04 人工审核）
