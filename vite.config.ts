@@ -29,5 +29,12 @@ export default defineConfig(async () => ({
       // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
+    // Forward API and preview traffic to the penguin server. `changeOrigin: false`
+    // keeps the Host header as-is; the target must stay `localhost` (not an IP) to
+    // satisfy the server's canonical-host guard.
+    proxy: {
+      "/api": { target: "http://localhost:7364", changeOrigin: false },
+      "/preview": { target: "http://localhost:7364", changeOrigin: false },
+    },
   },
 }));

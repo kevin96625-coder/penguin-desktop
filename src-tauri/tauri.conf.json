@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "identifier": "com.kevinchen.penguin-desktop",
   "build": {
+    "beforeDevCommand": "pnpm dev:web",
+    "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
-    "frontendDist": "../dist"
+    "frontendDist": "http://localhost:7364"
   },
   "app": {
     "windows": [
@@ -14,7 +16,6 @@
         "title": "penguin-desktop",
         "width": 800,
         "height": 600,
-        "url": "http://localhost:7364",
         "visible": false
       }
     ],
