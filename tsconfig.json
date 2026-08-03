@@ -6,6 +6,18 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    /* DTO type channel: type-only imports resolved from the vendored server/core dist (see src/api/types.ts) */
+    "baseUrl": ".",
+    "paths": {
+      "@penguin-api": ["vendor/penguin-harness/packages/server/dist/api/types"],
+      "@prismshadow/penguin-core/omnimessage": [
+        "vendor/penguin-harness/packages/core/dist/omnimessage/index"
+      ],
+      "@prismshadow/penguin-core/interfaces": [
+        "vendor/penguin-harness/packages/core/dist/interfaces"
+      ]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
