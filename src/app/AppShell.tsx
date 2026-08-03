@@ -11,6 +11,7 @@ import {
   SunIcon,
 } from "../design-system/icons";
 import { useTheme, type ThemeMode } from "./theme";
+import penguinLogo from "../assets/penguin-logo.svg";
 
 const themeIcons: Record<ThemeMode, typeof SunIcon> = {
   light: SunIcon,
@@ -49,6 +50,13 @@ export default function AppShell() {
           {/* macOS titlebar spacer (38px) — traffic lights live here */}
           <div data-tauri-drag-region className="h-[38px] shrink-0" />
           <div className="flex items-center gap-2 px-4 pb-1 pt-1">
+            <img
+              src={penguinLogo}
+              alt=""
+              aria-hidden
+              className="h-6 w-6 rounded-md"
+              draggable={false}
+            />
             <span className="text-[13px] font-semibold tracking-tight text-foreground">
               PenguinHarness
             </span>
