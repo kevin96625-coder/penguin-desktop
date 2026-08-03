@@ -64,14 +64,14 @@
   ```bash
   PORT=7364 node vendor/penguin-harness/packages/server/dist/index.js &
   curl -s -o /dev/null -w "%{http_code}" http://localhost:7364/   # 期望 200
-  curl -s http://localhost:7364/api/version                        # 期望 {"version":"0.2.0",...}
+  curl -s http://localhost:7364/api/version   # 期望 unauthorized JSON（该端点在 auth 之后挂载，app.ts:359-362；能拿到 JSON 即证明 API 栈正常。登录带 cookie 后返回 {"version":...}）
   kill %1
   ```
 - [ ] **0.8 空窗口**：`pnpm tauri dev` 弹出模板默认窗口即可。关闭。提交 `chore: verify harness build + empty window`。
 
 **验收标准（全部可执行）：**
 1. `ls vendor/penguin-harness/packages/server/dist/index.js` 与 `ls vendor/penguin-harness/packages/web/dist/index.html` 均存在。
-2. 0.7 的两个 curl 分别返回 `200` 与含 `"version"` 的 JSON。
+2. 0.7 的两个 curl 分别返回 `200` 与 unauthorized 错误 JSON（未登录的正确行为）；登录带 cookie 后 `/api/version` 返回含 `"version"` 的 JSON。
 3. `pnpm tauri dev` 打开窗口无报错退出。
 4. `git submodule status` 显示钉住的 commit（无 `+` 前缀）；`git -C vendor/penguin-harness diff --quiet && echo CLEAN` → `CLEAN`。
 
@@ -315,6 +315,10 @@
 **api-client 增量：** `endpoints/onboarding` 无需新建——复用 auth/projects/agents/models 已有方法；version 端点用于"关于"页显示版本（`GET /api/version` 与 submodule 钉的版本比对，报告 §E4 的版本探测落地点）。
 
 ---
+
+## 执行期修订记录
+
+- 2026-08-04 阶段 0：实测确认钉住 commit 上 `/api/version` 挂载于 auth 中间件之后（`app.ts:359-362`）——未登录返回 unauthorized 是正确行为。已修订 0.7 预期与阶段 0 验收项 2；对后续无实质影响（就绪探测本就用 `GET /`，前端版本显示本就在登录后）。阶段 1 若需登录前判活，唯一可用信号是 `GET /` 的任意 HTTP 响应。
 
 ## 返修记录（2026-08-04 人工审核）
 
