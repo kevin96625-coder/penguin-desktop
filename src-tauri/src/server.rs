@@ -228,16 +228,30 @@ fn spawn_ready_watch(app: tauri::AppHandle) {
             return;
         }
 
+        eprintln!("[penguin] server ready, looking for main window…");
+
         // The window may still be racing app initialization; retry briefly.
-        for _ in 0..50 {
+        for attempt in 0..50u32 {
+            if attempt == 0 || attempt % 10 == 0 || attempt == 49 {
+                eprintln!(
+                    "[penguin] windows: {:?}",
+                    app.webview_windows().keys().collect::<Vec<_>>()
+                );
+            }
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.reload();
                 let _ = window.show();
                 let _ = window.set_focus();
+                eprintln!(
+                    "[penguin] window '{}' shown, visible={:?}",
+                    window.label(),
+                    window.is_visible()
+                );
                 return;
             }
             std::thread::sleep(Duration::from_millis(100));
         }
+        fatal(app, "main window not found after server ready".into());
     });
 }
 
