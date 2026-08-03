@@ -25,3 +25,6 @@ dist-ssr
 
 # Bundled harness output (phase 5)
 dist-harness/
+
+# local credentials
+.env
