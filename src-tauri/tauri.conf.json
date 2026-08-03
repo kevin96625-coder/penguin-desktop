@@ -14,8 +14,10 @@
       {
         "label": "main",
         "title": "penguin-desktop",
-        "width": 800,
-        "height": 600,
+        "width": 1400,
+        "height": 800,
+        "minWidth": 1200,
+        "minHeight": 720,
         "visible": false
       }
     ],
