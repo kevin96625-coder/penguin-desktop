@@ -1,10 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { Button, StatusBadge } from "../../design-system/components";
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
   ChevronDownIcon,
   MessageSquareIcon,
   PanelBottomIcon,
   PanelLeftIcon,
   PanelRightIcon,
+  SquarePenIcon,
 } from "../../design-system/icons";
 import type { WorkspaceSession } from "./workspace-fixtures";
 import type { WorkspaceAction, WorkspaceState } from "./workspace-state";
@@ -20,23 +24,38 @@ export default function WorkspaceTopbar({
   dispatch,
   session,
 }: WorkspaceTopbarProps) {
+  const navigate = useNavigate();
+  const chromeButton =
+    "h-[30px] w-[30px] shrink-0 rounded-lg text-foreground/70 hover:bg-surface-raised";
+
+  function openNewTask() {
+    dispatch({ type: "select-session", sessionId: "visual-review" });
+    navigate("/");
+  }
+
+  /*
+   * Codex-style window chrome: ONE continuous band across the whole width — no
+   * sidebar tint and no vertical divider inside the topbar (the sidebar's own
+   * border starts below it). The left cluster is native traffic-light clearance
+   * followed by [panel toggle][back][forward]; collapsing the sidebar appends a
+   * compose button, because "New task" is only reachable from the rail when the
+   * rail is open. The grid column keeps the title aligned to the sidebar edge
+   * when open, and lets it follow the cluster when closed.
+   */
   return (
     <header
       data-tauri-drag-region
       className="grid h-[52px] shrink-0 border-b border-border/50 bg-surface-panel"
       style={{
-        gridTemplateColumns: state.sidebarCollapsed ? "116px minmax(0, 1fr)" : "272px minmax(0, 1fr)",
+        gridTemplateColumns: state.sidebarCollapsed ? "200px minmax(0, 1fr)" : "272px minmax(0, 1fr)",
       }}
     >
-      <div
-        data-tauri-drag-region
-        className="flex h-full items-center border-r border-border/50 bg-[hsl(var(--sidebar-bg))] transition-[width] duration-200 ease-out"
-      >
+      <div data-tauri-drag-region className="flex h-full items-center">
         <div data-tauri-drag-region className="h-full w-[76px] shrink-0" />
         <Button
           variant="ghost"
           size="icon"
-          className="h-[30px] w-[30px] shrink-0 rounded-lg text-foreground/70 hover:bg-surface-raised"
+          className={chromeButton}
           title={state.sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
           aria-label={state.sidebarCollapsed ? "展开侧栏" : "收起侧栏"}
           aria-pressed={!state.sidebarCollapsed}
@@ -44,6 +63,38 @@ export default function WorkspaceTopbar({
         >
           <PanelLeftIcon className="h-4 w-4" />
         </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={chromeButton}
+          title="后退"
+          aria-label="后退"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeftIcon className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={chromeButton}
+          title="前进"
+          aria-label="前进"
+          onClick={() => navigate(1)}
+        >
+          <ArrowRightIcon className="h-4 w-4" />
+        </Button>
+        {state.sidebarCollapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className={chromeButton}
+            title="新任务"
+            aria-label="新任务"
+            onClick={openNewTask}
+          >
+            <SquarePenIcon className="h-4 w-4" />
+          </Button>
+        )}
         <div data-tauri-drag-region className="h-full min-w-2 flex-1" />
       </div>
 

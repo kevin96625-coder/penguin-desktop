@@ -45,6 +45,34 @@ export function PanelRightIcon(props: ComponentProps<"svg">) {
   );
 }
 
+export function ArrowLeftIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M19 12H5" />
+      <path d="m12 19-7-7 7-7" />
+    </IconBase>
+  );
+}
+
+export function ArrowRightIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </IconBase>
+  );
+}
+
+/** Compose / new task — the square-pen glyph Codex puts beside the nav arrows. */
+export function SquarePenIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.4 2.6a2 2 0 0 1 2.8 2.8L12 14.6l-3.7 1 1-3.7Z" />
+    </IconBase>
+  );
+}
+
 export function ChevronDownIcon(props: ComponentProps<"svg">) {
   return (
     <IconBase {...props}>
