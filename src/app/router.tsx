@@ -5,6 +5,8 @@ import { me } from "../api/endpoints/auth";
 import LoginPage from "../features/auth/LoginPage";
 import OverviewPage from "../features/overview/OverviewPage";
 import SessionsPage from "../features/sessions/SessionsPage";
+import ChatWorkspace from "../features/workspace/ChatWorkspace";
+import WorkspaceEmptyPage from "../features/workspace/WorkspaceEmptyPage";
 import AppShell from "./AppShell";
 
 /** Global 401 handling: any request that hits 401 broadcasts this event (see client.ts). */
@@ -59,7 +61,10 @@ export default function AppRouter() {
             </Protected>
           }
         >
-          <Route path="/" element={<OverviewPage />} />
+          <Route path="/" element={<ChatWorkspace />} />
+          <Route path="/overview" element={<OverviewPage />} />
+          <Route path="/evaluations" element={<WorkspaceEmptyPage kind="evaluations" />} />
+          <Route path="/runs" element={<WorkspaceEmptyPage kind="runs" />} />
           <Route path="/sessions" element={<SessionsPage />} />
         </Route>
       </Routes>
