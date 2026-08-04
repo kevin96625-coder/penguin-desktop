@@ -40,14 +40,20 @@ export default function WorkspaceSidebar({
       }`}
     >
       <div className="flex h-full w-[272px] flex-col">
-        <div className="flex items-center gap-2 px-4 pb-1 pt-3">
-          <BrandMark size="sm" />
-          <span className="text-[13px] font-semibold tracking-tight text-foreground">
+        {/*
+         * Brand band: the wordmark carries the weight, the mark supports it.
+         * 22px plate-less logo (aligned to the nav icon column at 16px) + 14px
+         * wordmark one step above the 13px nav rows, then 20px of air so the
+         * band reads as a header rather than a first list item.
+         */}
+        <div className="flex items-center gap-2.5 px-4 pb-5 pt-4">
+          <BrandMark size="xs" plate={false} />
+          <span className="text-[14px] font-semibold tracking-[-0.01em] text-foreground">
             PenguinHarness
           </span>
         </div>
 
-        <nav aria-label="工作区功能" className="space-y-0.5 px-2 pt-3">
+        <nav aria-label="工作区功能" className="space-y-0.5 px-2">
           <SidebarItem
             icon={<PlusIcon />}
             active={pathname === "/"}
