@@ -171,24 +171,37 @@
   transition:
     color 200ms ease-out,
     background-color 200ms ease-out,
-    border-color 200ms ease-out;
+    border-color 200ms ease-out,
+    box-shadow 200ms ease-out;
 }
 
-/* Restrained running pulse: 1.6s, opacity-only, for the status dot. */
-@keyframes statusPulse {
-  0%,
-  100% {
+/* The badge box stays still while a new state glyph settles into place. */
+@keyframes statusGlyphIn {
+  from {
+    opacity: 0;
+    transform: scale(0.72) rotate(-12deg);
+  }
+  to {
     opacity: 1;
+    transform: scale(1) rotate(0);
   }
-  50% {
-    opacity: 0.45;
-  }
-}
-.animate-status-pulse {
-  animation: statusPulse 1.6s ease-in-out infinite;
 }
 
-/* ---- §6 prefers-reduced-motion: full coverage, including the pulse ---- */
+@keyframes statusSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-status-glyph {
+  animation: statusGlyphIn 220ms var(--ease-enter) both;
+}
+
+.animate-status-spin {
+  animation: statusSpin 1.4s linear infinite;
+}
+
+/* ---- §6 prefers-reduced-motion: full coverage, including glyph motion ---- */
 @media (prefers-reduced-motion: reduce) {
   .animate-chat-bubble-in,
   .animate-section-in,
@@ -196,7 +209,8 @@
   .animate-checkpoint-in,
   .animate-modal-in,
   .animate-backdrop-in,
-  .animate-status-pulse,
+  .animate-status-glyph,
+  .animate-status-spin,
   .stagger-menu > *,
   .stagger-chip > * {
     animation: none !important;

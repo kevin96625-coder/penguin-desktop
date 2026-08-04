@@ -7,6 +7,7 @@ export { default as StatCard } from "./StatCard";
 export { default as TrendChart } from "./TrendChart";
 export { default as StatusBadge } from "./StatusBadge";
 export { default as SectionHeading } from "./SectionHeading";
+export { default as BrandMark } from "./BrandMark";
 export { default as GlassCard } from "./GlassCard";
 export type { ButtonProps } from "./Button";
 export type { InputProps } from "./Input";

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "../cn";
+import GlassCard from "./GlassCard";
 
 export interface StatCardProps {
   label: string;
@@ -8,6 +9,8 @@ export interface StatCardProps {
   /** Optional small trend line under the value, e.g. "+2.4 vs last run". */
   trend?: ReactNode;
   trendTone?: "up" | "down" | "neutral";
+  /** Current high-priority metric; consumes the page's raised focus surface. */
+  emphasis?: boolean;
   className?: string;
 }
 
@@ -19,28 +22,23 @@ const trendToneClasses = {
 
 /*
  * Workbench stat tile — stage-3 upgrade (brief §7.2/7.4 direction).
- * A lightweight cut of the §5 glass focus recipe: light = white/70 + blur-xl
- * + rim; dark = white/[0.06] face + white/[0.10] border. No gloss layer, no
- * large throw — glass budget stays with true focus objects.
+ * Opaque by default: structural metrics belong to the raised surface tier,
+ * not the glass tier. `emphasis` moves one metric to the focus surface with a
+ * brighter rim. True blur/gloss remains centralized in GlassCard so a page
+ * cannot accidentally make every tile glass.
  */
 export default function StatCard({
   label,
   value,
   trend,
   trendTone = "neutral",
+  emphasis = false,
   className,
 }: StatCardProps) {
   const empty = value === null || value === undefined || value === "";
-  return (
-    <div
-      className={cn(
-        "rounded-xl border px-4 py-3 backdrop-blur-xl",
-        "border-black/[0.055] bg-white/70 shadow-rim",
-        "dark:border-white/[0.10] dark:bg-white/[0.06]",
-        className,
-      )}
-    >
-      <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+  const content = (
+    <>
+      <div className="text-[11px] font-medium tracking-[0.06em] text-muted-foreground">
         {label}
       </div>
       <div
@@ -56,6 +54,28 @@ export default function StatCard({
           {trend}
         </div>
       )}
+    </>
+  );
+
+  if (emphasis) {
+    return (
+      <GlassCard
+        variant="focus"
+        className={cn("min-h-[92px] px-4 py-3", className)}
+      >
+        {content}
+      </GlassCard>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "min-h-[92px] rounded-xl border border-border/50 bg-surface-raised px-4 py-3 shadow-sm",
+        className,
+      )}
+    >
+      {content}
     </div>
   );
 }
