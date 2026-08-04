@@ -82,12 +82,13 @@ export default function AccountMenu({ onClose }: AccountMenuProps) {
         variant="ghost"
         className="h-8 w-full justify-start rounded-lg px-2 text-xs"
         role="menuitem"
-        disabled
-        title="下一轮接入"
+        onClick={() => {
+          onClose();
+          navigate("/settings");
+        }}
       >
         <SettingsIcon className="h-4 w-4 text-muted-foreground" />
         设置
-        <span className="ml-auto text-[10px] text-muted-foreground">下一轮</span>
       </Button>
       <div className="my-1 h-px bg-border/60" />
       <Button

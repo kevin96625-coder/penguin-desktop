@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { BrandMark, SidebarItem } from "../../design-system/components";
 import {
+  BookIcon,
+  ChartIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   ClockIcon,
@@ -9,10 +11,13 @@ import {
   LayoutDashboardIcon,
   MessageSquareIcon,
   PlusIcon,
+  SettingsIcon,
+  UserIcon,
 } from "../../design-system/icons";
 import { useChat } from "../chat/ChatProvider";
 import type { WorkspaceAction, WorkspaceState } from "./workspace-state";
 import AccountMenu from "./AccountMenu";
+import EvolutionBadge from "./EvolutionBadge";
 
 interface WorkspaceSidebarProps {
   state: WorkspaceState;
@@ -25,7 +30,8 @@ export default function WorkspaceSidebar({
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { projectId, sessions, activeSessionId, selectSession, newSession } = useChat();
+  const { projectId, agentId, sessions, activeSessionId, selectSession, newSession } =
+    useChat();
   const projectExpanded =
     projectId !== null && !state.expandedProjectIds.includes(`collapsed:${projectId}`);
 
@@ -69,24 +75,45 @@ export default function WorkspaceSidebar({
           </SidebarItem>
           <SidebarItem
             icon={<LayoutDashboardIcon />}
-            active={pathname === "/overview"}
-            onClick={() => navigate("/overview")}
+            active={pathname === "/dashboard"}
+            onClick={() => navigate("/dashboard")}
           >
-            Overview
+            Dashboard
           </SidebarItem>
           <SidebarItem
             icon={<FlaskIcon />}
-            active={pathname === "/evaluations"}
-            onClick={() => navigate("/evaluations")}
+            active={pathname === "/benchmarks"}
+            onClick={() => navigate("/benchmarks")}
           >
-            Evaluations
+            Benchmarks
+          </SidebarItem>
+          <SidebarItem
+            icon={<BookIcon />}
+            active={pathname === "/skills"}
+            onClick={() => navigate("/skills")}
+          >
+            Skills
           </SidebarItem>
           <SidebarItem
             icon={<ClockIcon />}
-            active={pathname === "/runs"}
-            onClick={() => navigate("/runs")}
+            active={pathname === "/traces"}
+            onClick={() => navigate("/traces")}
           >
-            Runs
+            Traces
+          </SidebarItem>
+          <SidebarItem
+            icon={<ChartIcon />}
+            active={pathname === "/usage"}
+            onClick={() => navigate("/usage")}
+          >
+            Usage
+          </SidebarItem>
+          <SidebarItem
+            icon={<SettingsIcon />}
+            active={pathname === "/settings"}
+            onClick={() => navigate("/settings")}
+          >
+            Settings
           </SidebarItem>
         </nav>
 
@@ -116,15 +143,31 @@ export default function WorkspaceSidebar({
               </button>
               {projectExpanded && (
                 <div className="stagger-menu">
+                  {/* Agent row carries the evolution chip: version + trend vs the
+                      previous scoreboard round. Sessions nest under it. */}
+                  {agentId && (
+                    <SidebarItem
+                      indent={1}
+                      icon={<UserIcon />}
+                      active={pathname === "/dashboard"}
+                      className="animate-section-in text-[12px] font-medium"
+                      onClick={() => navigate("/dashboard")}
+                    >
+                      <span className="flex w-full min-w-0 items-center gap-1.5">
+                        <span className="truncate">{agentId}</span>
+                        <EvolutionBadge projectId={projectId} agentId={agentId} />
+                      </span>
+                    </SidebarItem>
+                  )}
                   {sessions.length === 0 && (
-                    <p className="px-2 py-1 pl-8 text-[11px] text-muted-foreground">
+                    <p className="px-2 py-1 pl-10 text-[11px] text-muted-foreground">
                       还没有会话
                     </p>
                   )}
                   {sessions.map((session) => (
                     <SidebarItem
                       key={session.sessionId}
-                      indent={1}
+                      indent={2}
                       icon={<MessageSquareIcon />}
                       active={pathname === "/" && activeSessionId === session.sessionId}
                       className="animate-section-in text-[12px] font-normal"

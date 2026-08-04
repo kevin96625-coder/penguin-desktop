@@ -73,6 +73,24 @@ export function SquarePenIcon(props: ComponentProps<"svg">) {
   );
 }
 
+export function BookIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </IconBase>
+  );
+}
+
+export function ChartIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M3 3v18h18" />
+      <path d="m7 15 4-5 3 3 5-7" />
+    </IconBase>
+  );
+}
+
 export function ChevronDownIcon(props: ComponentProps<"svg">) {
   return (
     <IconBase {...props}>
