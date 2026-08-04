@@ -15,19 +15,16 @@ import {
 export default function OverviewPage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-6 pb-12 pt-4">
-      <header className="animate-section-in mb-8">
-        <p className="font-mono text-[10px] font-medium tracking-[0.12em] text-muted-foreground/70">
-          WORKSPACE / OVERVIEW
-        </p>
-        <h1 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
+      <header className="animate-section-in mb-7">
+        <h1 className="text-[20px] font-semibold leading-7 tracking-[-0.02em] text-foreground">
           Overview
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Agent 构建工作台 · 评测与运行数据将在阶段 4 接入
+        <p className="mt-0.5 max-w-[62ch] text-[13px] leading-5 text-muted-foreground">
+          当前 Agent 的评测、成本与运行状态将在阶段 4 接入
         </p>
       </header>
 
-      <section className="animate-section-in mb-8">
+      <section className="animate-section-in mb-7">
         <SectionHeading active className="mb-3">
           评测概览
         </SectionHeading>
@@ -44,7 +41,7 @@ export default function OverviewPage() {
         </div>
       </section>
 
-      <section className="animate-section-in mb-8" style={{ animationDelay: "60ms" }}>
+      <section className="animate-section-in mb-7" style={{ animationDelay: "60ms" }}>
         <SectionHeading className="mb-3">评分趋势</SectionHeading>
         <TrendChart points={[]} height={164} emptyLabel="运行首次评测后展示趋势" />
       </section>

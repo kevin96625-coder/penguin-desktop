@@ -9,6 +9,7 @@ import {
 import {
   ChevronDownIcon,
   LayoutDashboardIcon,
+  LogOutIcon,
   MessageSquareIcon,
   MonitorIcon,
   MoonIcon,
@@ -19,6 +20,7 @@ import {
   SettingsIcon,
   SunIcon,
 } from "../design-system/icons";
+import { logout } from "../api/endpoints/auth";
 import { useTheme, type ThemeMode } from "./theme";
 
 const themeIcons: Record<ThemeMode, typeof SunIcon> = {
@@ -45,6 +47,14 @@ export default function AppShell() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const ThemeIcon = themeIcons[mode];
+
+  async function onLogout() {
+    try {
+      await logout();
+    } finally {
+      navigate("/login", { replace: true });
+    }
+  }
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
@@ -179,9 +189,16 @@ export default function AppShell() {
                 Sessions
               </SidebarItem>
             </nav>
-            <div className="px-2 pb-3">
+            <div className="border-t border-border/40 px-2 pb-3 pt-2">
               <SidebarItem icon={<SettingsIcon />} disabled title="阶段 4 开放">
                 Settings
+              </SidebarItem>
+              <SidebarItem
+                icon={<LogOutIcon />}
+                className="mt-0.5 text-muted-foreground hover:text-foreground"
+                onClick={onLogout}
+              >
+                退出登录
               </SidebarItem>
             </div>
           </div>

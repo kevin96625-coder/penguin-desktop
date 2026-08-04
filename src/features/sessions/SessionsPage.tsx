@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ApiError } from "../../api/client";
-import { logout } from "../../api/endpoints/auth";
 import {
   listAgents,
   listProjects,
   listSessions,
 } from "../../api/endpoints/sessions";
 import type { SessionInfo, SessionStatus } from "../../api/types";
-import {
-  Button,
-  SectionHeading,
-  StatusBadge,
-} from "../../design-system/components";
+import { SectionHeading, StatusBadge } from "../../design-system/components";
 import type { BadgeStatus } from "../../design-system/components";
-import { LogOutIcon } from "../../design-system/icons";
 
 /** Server session states → badge semantics (idle rests gray, busy states pulse). */
 const statusToBadge: Record<SessionStatus, { badge: BadgeStatus; label: string }> =
@@ -32,7 +25,6 @@ export default function SessionsPage() {
   const [sessions, setSessions] = useState<SessionInfo[] | null>(null);
   const [scope, setScope] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     let cancelled = false;
@@ -72,37 +64,25 @@ export default function SessionsPage() {
     };
   }, []);
 
-  async function onLogout() {
-    try {
-      await logout();
-    } finally {
-      navigate("/login", { replace: true });
-    }
-  }
-
   return (
     <div className="mx-auto w-full max-w-3xl px-6 pb-12 pt-4">
-      <header className="animate-section-in mb-6">
-        <p className="font-mono text-[10px] font-medium tracking-[0.12em] text-muted-foreground/70">
-          WORKSPACE / SESSIONS
-        </p>
-        <div className="flex items-center justify-between">
-          <h1 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
-            Sessions
-          </h1>
-          <Button variant="ghost" size="sm" onClick={onLogout}>
-            <LogOutIcon className="h-3.5 w-3.5" />
-            退出登录
-          </Button>
-        </div>
+      <header className="animate-section-in mb-5">
+        <h1 className="text-[20px] font-semibold leading-7 tracking-[-0.02em] text-foreground">
+          Sessions
+        </h1>
         {scope && (
-          <p className="mt-1 font-mono text-xs text-muted-foreground">{scope}</p>
+          <p className="mt-0.5 font-mono text-[11px] leading-5 text-muted-foreground">
+            {scope}
+          </p>
         )}
       </header>
 
-      <SectionHeading active className="animate-section-in mb-2">
-        会话列表
-      </SectionHeading>
+      <div className="animate-section-in mb-2 flex items-center justify-between">
+        <SectionHeading active>会话列表</SectionHeading>
+        <span className="font-mono text-[10px] tabular-nums text-muted-foreground/75">
+          {sessions === null ? "—" : `${sessions.length} SESSIONS`}
+        </span>
+      </div>
 
       <div className="rounded-xl border border-border/50 bg-surface-panel/70 p-1 shadow-sm">
         {error && (
