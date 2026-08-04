@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" aria-label="Primary and secondary mark geometry specification">
+  <rect width="1000" height="600" rx="32" fill="#0a0f1a"/>
+  <text x="64" y="72" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="600">主副标组合几何</text>
+  <text x="64" y="104" fill="#fefefe" opacity=".52" font-family="Inter, -apple-system, sans-serif" font-size="14">Lower-right evolution seal · 0.28P</text>
+  <rect x="100" y="150" width="340" height="340" rx="82" fill="#111b2a"/>
+  <image href="logos/penguinharness-a-white.svg" x="130" y="180" width="280" height="280"/>
+  <circle cx="400" cy="450" r="54" fill="#0a0f1a" stroke="#fefefe" stroke-width="10"/>
+  <image href="logos/evolution-secondary-mark.svg" x="364" y="414" width="72" height="72"/>
+  <path d="M130 520H410M470 180V460" stroke="#015dfc" stroke-width="2" stroke-dasharray="8 8" opacity=".75"/>
+  <path d="M130 536V504M410 536V504M454 180H486M454 460H486" stroke="#015dfc" stroke-width="3"/>
+  <text x="270" y="566" text-anchor="middle" fill="#015dfc" font-family="Inter, -apple-system, sans-serif" font-size="14">P = 主标视觉直径</text>
+  <text x="530" y="184" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">位置</text>
+  <text x="530" y="214" fill="#fefefe" opacity=".68" font-family="Inter, -apple-system, sans-serif" font-size="15">4:30 方向；不覆盖头部、眼睛和蓝色动势线</text>
+  <text x="530" y="272" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">尺寸</text>
+  <text x="530" y="302" fill="#fefefe" opacity=".68" font-family="Inter, -apple-system, sans-serif" font-size="15">推荐 0.28P；允许范围 0.25P–0.33P</text>
+  <text x="530" y="360" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">分离</text>
+  <text x="530" y="390" fill="#fefefe" opacity=".68" font-family="Inter, -apple-system, sans-serif" font-size="15">叠放时用 0.035P 白色保护环；分开放置最小间距 0.08P</text>
+  <text x="530" y="448" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">透明度</text>
+  <text x="530" y="478" fill="#fefefe" opacity=".68" font-family="Inter, -apple-system, sans-serif" font-size="15">功能状态 100%；装饰语境 72%；不得低于 60%</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="App icon in macOS dock">
+  <rect width="640" height="360" rx="28" fill="#0a0f1a"/>
+  <rect x="120" y="242" width="400" height="88" rx="28" fill="#111b2a" opacity=".88"/>
+  <image href="../logos/penguinharness-a-dark.svg" x="248" y="52" width="144" height="144"/>
+  <rect x="268" y="308" width="104" height="4" rx="2" fill="#015dfc"/>
+  <text x="320" y="222" text-anchor="middle" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">App icon · 1024 px</text>
+</svg>

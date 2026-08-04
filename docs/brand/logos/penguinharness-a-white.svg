@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="PenguinHarness A refined logo on white">
+  <defs>
+    <linearGradient id="navy" x1="250" y1="250" x2="780" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111b2a"/><stop offset="1" stop-color="#091423"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="#fefefe"/>
+  <rect x="40" y="40" width="944" height="944" rx="226" fill="#fefefe"/>
+  <path d="M207 678C270 660 324 617 371 559L243 338C231 317 251 296 275 306C360 341 437 395 499 462C519 374 540 302 600 263C661 224 747 244 791 304L849 329L793 362C796 474 761 583 680 658C592 739 468 771 359 739L272 790L305 725L211 760L270 695Z" fill="url(#navy)"/>
+  <path d="M681 301C635 278 581 301 558 344C541 377 555 409 593 429C553 449 523 486 503 532C473 600 439 652 383 688C471 717 564 690 633 629C700 569 731 478 725 386C716 348 701 318 681 301Z" fill="#fefefe"/>
+  <circle cx="649" cy="344" r="24" fill="#091423"/>
+  <circle cx="657" cy="336" r="7" fill="#fefefe"/>
+  <path d="M787 328L849 329L793 362Z" fill="#015dfc"/>
+  <path d="M186 674C137 631 193 562 307 531" fill="none" stroke="#015dfc" stroke-width="12" stroke-linecap="round"/>
+  <path d="M267 806C464 844 690 770 837 626" fill="none" stroke="#015dfc" stroke-width="15" stroke-linecap="round"/>
+</svg>

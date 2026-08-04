@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Splash screen primary and secondary mark combination">
+  <rect width="640" height="360" rx="28" fill="#0a0f1a"/>
+  <image href="../logos/penguinharness-a-white.svg" x="244" y="54" width="152" height="152"/>
+  <circle cx="386" cy="194" r="34" fill="#0a0f1a" stroke="#fefefe" stroke-width="6"/>
+  <image href="../logos/evolution-secondary-mark.svg" x="362" y="170" width="48" height="48"/>
+  <text x="320" y="254" text-anchor="middle" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="25" font-weight="600" letter-spacing="-.35">PenguinHarness</text>
+  <text x="320" y="286" text-anchor="middle" fill="#fefefe" opacity=".55" font-family="Inter, -apple-system, sans-serif" font-size="13">Agents building agents.</text>
+</svg>

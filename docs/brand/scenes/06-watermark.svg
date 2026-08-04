@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Monochrome evolution watermark on document">
+  <rect width="640" height="360" rx="28" fill="#0a0f1a"/>
+  <rect x="138" y="28" width="364" height="304" rx="14" fill="#fefefe"/>
+  <rect x="178" y="70" width="184" height="18" rx="9" fill="#111b2a"/>
+  <rect x="178" y="112" width="268" height="8" rx="4" fill="#111b2a" opacity=".22"/><rect x="178" y="134" width="244" height="8" rx="4" fill="#111b2a" opacity=".22"/>
+  <rect x="178" y="156" width="258" height="8" rx="4" fill="#111b2a" opacity=".22"/>
+  <image href="../logos/evolution-secondary-mark.svg" x="394" y="234" width="80" height="80" opacity=".12"/>
+  <text x="178" y="285" fill="#111b2a" opacity=".42" font-family="Inter, -apple-system, sans-serif" font-size="12">80 px · 12% opacity</text>
+</svg>

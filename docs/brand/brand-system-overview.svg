@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="PenguinHarness dual-mark brand system overview">
+  <rect width="1600" height="1000" fill="#0a0f1a"/>
+  <text x="70" y="70" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="34" font-weight="600" letter-spacing="-.5">PenguinHarness · Dual-mark system</text>
+  <text x="70" y="104" fill="#fefefe" opacity=".5" font-family="Inter, -apple-system, sans-serif" font-size="15">PRIMARY = identity · SECONDARY = evolution state</text>
+  <g transform="translate(70 145)"><image href="scenes/01-app-icon.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(430 145)"><image href="scenes/02-sidebar-brand.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(790 145)"><image href="scenes/03-favicon.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(1150 145)"><image href="scenes/04-loading.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(70 365)"><image href="scenes/05-evolution-status.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(430 365)"><image href="scenes/06-watermark.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(790 365)"><image href="scenes/07-splash.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <g transform="translate(1150 365)"><image href="scenes/08-about.png" width="340" height="191" preserveAspectRatio="xMidYMid slice"/></g>
+  <rect x="70" y="610" width="1020" height="300" rx="28" fill="#111b2a"/>
+  <image href="logos/penguinharness-a-white.svg" x="110" y="650" width="220" height="220"/>
+  <image href="logos/evolution-secondary-mark.svg" x="370" y="690" width="140" height="140"/>
+  <text x="560" y="716" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="25" font-weight="600">Recommended pairing</text>
+  <text x="560" y="756" fill="#fefefe" opacity=".62" font-family="Inter, -apple-system, sans-serif" font-size="16">A refined primary · evolution secondary</text>
+  <text x="560" y="792" fill="#015dfc" font-family="Inter, -apple-system, sans-serif" font-size="15" font-weight="600">0.28P · lower-right · protected separation</text>
+  <rect x="1130" y="610" width="360" height="300" rx="28" fill="#fefefe"/>
+  <text x="1170" y="664" fill="#111b2a" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600">CORE PALETTE</text>
+  <rect x="1170" y="700" width="126" height="54" rx="12" fill="#111b2a"/><rect x="1324" y="700" width="126" height="54" rx="12" fill="#091423"/>
+  <rect x="1170" y="780" width="126" height="54" rx="12" fill="#015dfc"/><rect x="1324" y="780" width="126" height="54" rx="12" fill="#fefefe" stroke="#111b2a" stroke-width="2"/>
+  <text x="1233" y="773" text-anchor="middle" fill="#111b2a" font-family="ui-monospace, monospace" font-size="12">#111b2a</text><text x="1387" y="773" text-anchor="middle" fill="#111b2a" font-family="ui-monospace, monospace" font-size="12">#091423</text>
+  <text x="1233" y="853" text-anchor="middle" fill="#111b2a" font-family="ui-monospace, monospace" font-size="12">#015dfc</text><text x="1387" y="853" text-anchor="middle" fill="#111b2a" font-family="ui-monospace, monospace" font-size="12">#fefefe</text>
+</svg>

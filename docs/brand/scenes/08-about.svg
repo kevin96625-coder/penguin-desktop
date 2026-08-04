@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="About page complete brand lockup">
+  <rect width="640" height="360" rx="28" fill="#fefefe"/>
+  <rect x="56" y="46" width="528" height="268" rx="28" fill="#0a0f1a"/>
+  <image href="../logos/penguinharness-a-white.svg" x="92" y="94" width="120" height="120"/>
+  <circle cx="207" cy="207" r="24" fill="#0a0f1a" stroke="#fefefe" stroke-width="4"/>
+  <image href="../logos/evolution-secondary-mark.svg" x="190" y="190" width="34" height="34"/>
+  <text x="250" y="150" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="31" font-weight="600" letter-spacing="-.45">PenguinHarness</text>
+  <text x="250" y="184" fill="#fefefe" opacity=".56" font-family="Inter, -apple-system, sans-serif" font-size="14">Engineer agents that evolve.</text>
+  <rect x="250" y="212" width="248" height="2" fill="#015dfc"/>
+  <text x="250" y="248" fill="#fefefe" opacity=".46" font-family="Inter, -apple-system, sans-serif" font-size="12">PRIMARY 120 PX · SECONDARY 32 PX</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Evolution status indicator in agent card">
+  <rect width="640" height="360" rx="28" fill="#fefefe"/>
+  <rect x="72" y="72" width="496" height="216" rx="26" fill="#0a0f1a"/>
+  <circle cx="130" cy="130" r="28" fill="#111b2a"/><image href="../logos/penguinharness-d-blue.svg" x="112" y="112" width="36" height="36"/>
+  <text x="180" y="127" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="20" font-weight="600">Build Agent</text>
+  <text x="180" y="153" fill="#fefefe" opacity=".58" font-family="Inter, -apple-system, sans-serif" font-size="14">generation 12</text>
+  <rect x="112" y="196" width="416" height="54" rx="14" fill="#111b2a"/>
+  <image href="../logos/evolution-secondary-mark.svg" x="130" y="211" width="24" height="24"/>
+  <text x="168" y="230" fill="#fefefe" font-family="Inter, -apple-system, sans-serif" font-size="15" font-weight="600">Evolution score</text>
+  <text x="494" y="230" text-anchor="end" fill="#015dfc" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="700">92</text>
+</svg>
