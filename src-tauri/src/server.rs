@@ -141,10 +141,51 @@ fn server_dist_path() -> Result<PathBuf, String> {
     })
 }
 
+/// Where the shipped harness and frontend live inside the .app bundle.
+///
+/// Release resolves both out of `resource_dir()`; the entry is the flattened CLI from
+/// `scripts/bundle-harness.sh`, which is started with the `server` subcommand (the raw
+/// server entry is not part of the CLI deploy tree). Dev keeps the submodule layout and
+/// leaves `PENGUIN_WEB_DIST` unset, so the server serves the official web UI and our
+/// frontend is served by Vite instead.
+struct BundlePaths {
+    entry: PathBuf,
+    web_dist: PathBuf,
+}
+
+fn bundle_paths(app: &tauri::AppHandle) -> Result<BundlePaths, String> {
+    use tauri::Manager;
+    let res = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("无法解析资源目录: {e}"))?;
+    // Resources declared with a `../` prefix are re-rooted under `_up_` inside the
+    // bundle, so both candidates are checked rather than assuming either layout.
+    let roots = [res.join("_up_"), res.clone()];
+    for root in &roots {
+        let entry = root.join("dist-harness/dist/index.js");
+        if entry.is_file() {
+            return Ok(BundlePaths {
+                web_dist: root.join("dist"),
+                entry,
+            });
+        }
+    }
+    Err(format!(
+        "打包内的 penguin server 不存在：{}\n请先运行 scripts/bundle-harness.sh 再打包。",
+        roots[0].join("dist-harness/dist/index.js").display()
+    ))
+}
+
 /// Spawn the penguin server in its own process group, stdout/stderr redirected
 /// to the log file. Never binds anything itself; PORT/HOST are passed via env.
-fn spawn_server() -> Result<Child, String> {
+fn spawn_server(app: &tauri::AppHandle) -> Result<Child, String> {
     let runtime = detect_runtime()?;
+    let bundled = if cfg!(debug_assertions) {
+        None
+    } else {
+        Some(bundle_paths(app)?)
+    };
 
     let log = File::create(log_path())
         .map_err(|e| format!("无法创建日志文件 {}: {e}", log_path().display()))?;
@@ -152,19 +193,34 @@ fn spawn_server() -> Result<Child, String> {
         .try_clone()
         .map_err(|e| format!("无法复制日志文件句柄: {e}"))?;
 
-    let mut cmd = match runtime {
-        RuntimeKind::Node(node) => {
+    let mut cmd = match (&bundled, runtime) {
+        // Release + a real Node: run the flattened CLI's `server` subcommand.
+        (Some(paths), RuntimeKind::Node(node)) => {
+            let mut c = Command::new(node);
+            c.arg("--disable-warning=ExperimentalWarning")
+                .arg(&paths.entry)
+                .args(["server", "--port", "7364"]);
+            c
+        }
+        (None, RuntimeKind::Node(node)) => {
             let dist = server_dist_path()?;
             let mut c = Command::new(node);
             c.arg("--disable-warning=ExperimentalWarning").arg(dist);
             c
         }
-        RuntimeKind::PenguinLauncher(penguin) => {
+        // The official launcher brings its own harness; the bundled copy is unused.
+        (_, RuntimeKind::PenguinLauncher(penguin)) => {
             let mut c = Command::new(penguin);
             c.args(["server", "--port", "7364"]);
             c
         }
     };
+
+    // Same-origin hosting of OUR frontend: without this the server would fall back to
+    // the official web UI baked into the harness.
+    if let Some(paths) = &bundled {
+        cmd.env("PENGUIN_WEB_DIST", &paths.web_dist);
+    }
 
     cmd.env("PORT", "7364")
         .env("HOST", "127.0.0.1")
@@ -239,7 +295,30 @@ fn spawn_ready_watch(app: tauri::AppHandle) {
                 );
             }
             if let Some(window) = app.get_webview_window("main") {
+                /*
+                 * Release: navigate explicitly to the server origin.
+                 *
+                 * A URL `frontendDist` does NOT get the release window onto that origin —
+                 * the webview comes up on the internal tauri:// document with nothing
+                 * embedded (nothing is, precisely because frontendDist is a URL), which
+                 * renders as a blank white page and never requests a single asset. A
+                 * `reload()` then just reloads that empty document.
+                 *
+                 * Navigating here rather than pinning `windows[0].url` in the config keeps
+                 * dev on the Vite devUrl, which the config field would override and break HMR.
+                 */
+                #[cfg(not(debug_assertions))]
+                {
+                    match format!("http://localhost:{PORT}").parse() {
+                        Ok(url) => {
+                            let _ = window.navigate(url);
+                        }
+                        Err(e) => eprintln!("[penguin] bad server url: {e}"),
+                    }
+                }
+                #[cfg(debug_assertions)]
                 let _ = window.reload();
+
                 let _ = window.show();
                 let _ = window.set_focus();
                 eprintln!(
@@ -308,7 +387,7 @@ pub fn start(app: tauri::AppHandle) {
         return;
     }
 
-    match spawn_server() {
+    match spawn_server(&app) {
         Ok(child) => {
             {
                 let state = app.state::<SharedServerState>();
