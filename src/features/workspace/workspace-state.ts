@@ -1,19 +1,14 @@
-export interface PreviewMessage {
-  id: string;
-  role: "user";
-  content: string;
-  localPreview: true;
-}
-
+/**
+ * Shell-only UI state. Session selection, the draft and the transcript moved into
+ * features/chat/ChatProvider when stage 4a replaced the fixtures with the real API — this
+ * reducer now owns nothing but the chrome toggles.
+ */
 export interface WorkspaceState {
   sidebarCollapsed: boolean;
   bottomPanelOpen: boolean;
   rightPanelOpen: boolean;
   accountMenuOpen: boolean;
   expandedProjectIds: string[];
-  selectedSessionId: string;
-  draft: string;
-  previewMessages: PreviewMessage[];
 }
 
 export type WorkspaceAction =
@@ -22,10 +17,7 @@ export type WorkspaceAction =
   | { type: "toggle-right-panel" }
   | { type: "toggle-account-menu" }
   | { type: "close-account-menu" }
-  | { type: "toggle-project"; projectId: string }
-  | { type: "select-session"; sessionId: string }
-  | { type: "set-draft"; value: string }
-  | { type: "submit-draft" };
+  | { type: "toggle-project"; projectId: string };
 
 export interface WorkspaceOutletContext {
   state: WorkspaceState;
@@ -37,10 +29,7 @@ export const initialWorkspaceState: WorkspaceState = {
   bottomPanelOpen: false,
   rightPanelOpen: false,
   accountMenuOpen: false,
-  expandedProjectIds: ["penguin-desktop", "live-agent"],
-  selectedSessionId: "visual-review",
-  draft: "",
-  previewMessages: [],
+  expandedProjectIds: [],
 };
 
 export function workspaceReducer(
@@ -65,31 +54,6 @@ export function workspaceReducer(
         expandedProjectIds: expanded
           ? state.expandedProjectIds.filter((id) => id !== action.projectId)
           : [...state.expandedProjectIds, action.projectId],
-      };
-    }
-    case "select-session":
-      return {
-        ...state,
-        selectedSessionId: action.sessionId,
-        accountMenuOpen: false,
-      };
-    case "set-draft":
-      return { ...state, draft: action.value };
-    case "submit-draft": {
-      const content = state.draft.trim();
-      if (!content) return state;
-      return {
-        ...state,
-        draft: "",
-        previewMessages: [
-          ...state.previewMessages,
-          {
-            id: `preview-${state.previewMessages.length + 1}`,
-            role: "user",
-            content,
-            localPreview: true,
-          },
-        ],
       };
     }
   }

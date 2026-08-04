@@ -10,27 +10,25 @@ import {
   PanelRightIcon,
   SquarePenIcon,
 } from "../../design-system/icons";
-import type { WorkspaceSession } from "./workspace-fixtures";
+import { useChat } from "../chat/ChatProvider";
 import type { WorkspaceAction, WorkspaceState } from "./workspace-state";
 
 interface WorkspaceTopbarProps {
   state: WorkspaceState;
   dispatch: (action: WorkspaceAction) => void;
-  session: WorkspaceSession;
 }
 
-export default function WorkspaceTopbar({
-  state,
-  dispatch,
-  session,
-}: WorkspaceTopbarProps) {
+export default function WorkspaceTopbar({ state, dispatch }: WorkspaceTopbarProps) {
   const navigate = useNavigate();
+  const { activeSession, agentId, taskState, newSession } = useChat();
+  const title = activeSession?.title ?? "新会话";
+  const model = activeSession?.modelId ?? "—";
   const chromeButton =
     "h-[30px] w-[30px] shrink-0 rounded-lg text-foreground/70 hover:bg-surface-raised";
 
   function openNewTask() {
-    dispatch({ type: "select-session", sessionId: "visual-review" });
     navigate("/");
+    void newSession();
   }
 
   /*
@@ -103,26 +101,29 @@ export default function WorkspaceTopbar({
           variant="ghost"
           size="sm"
           className="h-[30px] min-w-0 max-w-[190px] justify-start gap-1.5 rounded-lg px-2 text-[12px] font-semibold tracking-tight hover:bg-surface-raised"
-          title={`${session.title} · ${session.agentId}`}
+          title={`${title} · ${agentId ?? ""}`}
         >
           <MessageSquareIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          <span className="truncate">{session.title}</span>
+          <span className="truncate">{title}</span>
         </Button>
 
         <Button
           variant="ghost"
           size="sm"
           className="h-[30px] min-w-0 max-w-[220px] justify-start gap-1.5 rounded-lg border border-border/50 bg-surface-raised px-2.5 font-mono text-[11px] font-medium text-foreground/75 shadow-rim hover:bg-surface-focus hover:text-foreground"
-          title={`本地视觉预览模型：${session.model}`}
+          title={`会话模型：${model}`}
         >
-          <span className="truncate">{session.model}</span>
+          <span className="truncate">{model}</span>
           <ChevronDownIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
         </Button>
 
         <div data-tauri-drag-region className="h-full min-w-10 flex-1" />
 
-        <StatusBadge status={session.status} className="shrink-0">
-          {session.status === "idle" ? "Idle" : session.status}
+        <StatusBadge
+          status={taskState === "idle" ? "complete" : "running"}
+          className="shrink-0"
+        >
+          {taskState === "idle" ? "Idle" : taskState}
         </StatusBadge>
         <span aria-hidden className="mx-0.5 h-4 w-px shrink-0 bg-border/70" />
         <Button

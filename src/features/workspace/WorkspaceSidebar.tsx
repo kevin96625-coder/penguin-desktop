@@ -10,7 +10,7 @@ import {
   MessageSquareIcon,
   PlusIcon,
 } from "../../design-system/icons";
-import { workspaceProjects } from "./workspace-fixtures";
+import { useChat } from "../chat/ChatProvider";
 import type { WorkspaceAction, WorkspaceState } from "./workspace-state";
 import AccountMenu from "./AccountMenu";
 
@@ -25,9 +25,12 @@ export default function WorkspaceSidebar({
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { projectId, sessions, activeSessionId, selectSession, newSession } = useChat();
+  const projectExpanded =
+    projectId !== null && !state.expandedProjectIds.includes(`collapsed:${projectId}`);
 
   function openConversation(sessionId: string) {
-    dispatch({ type: "select-session", sessionId });
+    selectSession(sessionId);
     navigate("/");
   }
 
@@ -57,7 +60,10 @@ export default function WorkspaceSidebar({
           <SidebarItem
             icon={<PlusIcon />}
             active={pathname === "/"}
-            onClick={() => openConversation("visual-review")}
+            onClick={() => {
+              navigate("/");
+              void newSession();
+            }}
           >
             New task
           </SidebarItem>
@@ -88,43 +94,49 @@ export default function WorkspaceSidebar({
           PROJECTS
         </div>
         <nav aria-label="项目与会话" className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
-          {workspaceProjects.map((project) => {
-            const expanded = state.expandedProjectIds.includes(project.id);
-            return (
-              <div key={project.id} className="mt-0.5">
-                <button
-                  type="button"
-                  aria-expanded={expanded}
-                  className="flex h-[30px] w-full items-center gap-2 rounded-lg px-2 text-left text-[12px] font-medium text-foreground/90 transition-colors duration-150 hover:bg-foreground/[0.05]"
-                  onClick={() => dispatch({ type: "toggle-project", projectId: project.id })}
-                >
-                  {expanded ? (
-                    <ChevronDownIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
-                  ) : (
-                    <ChevronRightIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
-                  )}
-                  <FolderIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  <span className="truncate">{project.name}</span>
-                </button>
-                {expanded && (
-                  <div className="stagger-menu">
-                    {project.sessions.map((session) => (
-                      <SidebarItem
-                        key={session.id}
-                        indent={1}
-                        icon={<MessageSquareIcon />}
-                        active={pathname === "/" && state.selectedSessionId === session.id}
-                        className="animate-section-in text-[12px] font-normal"
-                        onClick={() => openConversation(session.id)}
-                      >
-                        {session.title}
-                      </SidebarItem>
-                    ))}
-                  </div>
+          {projectId === null ? (
+            <p className="px-2 py-1 text-[11px] text-muted-foreground">加载中…</p>
+          ) : (
+            <div className="mt-0.5">
+              <button
+                type="button"
+                aria-expanded={projectExpanded}
+                className="flex h-[30px] w-full items-center gap-2 rounded-lg px-2 text-left text-[12px] font-medium text-foreground/90 transition-colors duration-150 hover:bg-foreground/[0.05]"
+                onClick={() =>
+                  dispatch({ type: "toggle-project", projectId: `collapsed:${projectId}` })
+                }
+              >
+                {projectExpanded ? (
+                  <ChevronDownIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+                ) : (
+                  <ChevronRightIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
                 )}
-              </div>
-            );
-          })}
+                <FolderIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                <span className="truncate">{projectId}</span>
+              </button>
+              {projectExpanded && (
+                <div className="stagger-menu">
+                  {sessions.length === 0 && (
+                    <p className="px-2 py-1 pl-8 text-[11px] text-muted-foreground">
+                      还没有会话
+                    </p>
+                  )}
+                  {sessions.map((session) => (
+                    <SidebarItem
+                      key={session.sessionId}
+                      indent={1}
+                      icon={<MessageSquareIcon />}
+                      active={pathname === "/" && activeSessionId === session.sessionId}
+                      className="animate-section-in text-[12px] font-normal"
+                      onClick={() => openConversation(session.sessionId)}
+                    >
+                      {session.title ?? "New Chat"}
+                    </SidebarItem>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </nav>
 
         <div className="relative border-t border-border/40 p-2">
