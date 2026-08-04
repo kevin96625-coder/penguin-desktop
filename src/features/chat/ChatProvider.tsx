@@ -220,7 +220,24 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         setAgentId(a.agentId);
         const res = await listSessions(p.projectId, a.agentId);
         if (cancelled) return;
-        const live = res.sessions.filter((s) => !s.archived);
+        let live = res.sessions.filter((s) => !s.archived);
+        if (live.length === 0) {
+          /*
+           * Create the first session eagerly rather than lazily on first send.
+           * A fresh SSE subscription intentionally does NOT replay the channel buffer
+           * (history is the messages endpoint's job), so if the very first task were
+           * posted into a session created in the same tick, its opening events would be
+           * published before the subscription exists and could not be recovered from the
+           * stream — the message would sit in the Trace but never render. Having a live
+           * session (and therefore a live subscription) before the composer is usable
+           * removes that window entirely.
+           */
+          const created = await createSession(p.projectId, a.agentId, {
+            approvalMode: "allow-all",
+          });
+          if (cancelled) return;
+          live = [created.session];
+        }
         setSessions(live);
         setActiveSessionId(live[0]?.sessionId ?? null);
         setReady(true);
@@ -277,6 +294,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const body = text.trim();
       if (!body) return;
       let sid = activeSessionId;
+      let justCreated = false;
       setBusy(true);
       try {
         if (!sid) {
@@ -285,6 +303,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             approvalMode: "allow-all",
           });
           sid = created.session.sessionId;
+          justCreated = true;
           await refreshSessions(projectId, agentId);
           setActiveSessionId(sid);
         }
@@ -296,6 +315,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         if (res.sessionId !== sid) {
           if (projectId && agentId) await refreshSessions(projectId, agentId);
           setActiveSessionId(res.sessionId);
+        } else if (justCreated) {
+          // Fallback for the rare lazy-create path (bootstrap normally guarantees a live
+          // session, so this is only reachable if that one was archived/deleted mid-flight):
+          // re-read history, since events published before the subscription existed cannot
+          // be recovered from the stream.
+          void rebuild(res.sessionId);
         }
       } catch (err) {
         setError(errText(err));
@@ -303,7 +328,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         setBusy(false);
       }
     },
-    [activeSessionId, projectId, agentId, refreshSessions],
+    [activeSessionId, projectId, agentId, refreshSessions, rebuild],
   );
 
   const decide = useCallback(

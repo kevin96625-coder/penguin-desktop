@@ -142,3 +142,48 @@ export async function setModelPointers(
     ...(patch.visionModel ? { visionModel: patch.visionModel } : {}),
   });
 }
+
+/**
+ * Onboarding's provider step: add (or update) one custom OpenAI-compatible entry with its
+ * credential, optionally pointing `defaultModel` at it.
+ *
+ * A fresh install ships 77 preset entries and ZERO stored keys, so the very first task
+ * fails with `model_credential_missing` until something like this runs — this is the real
+ * gate a new user hits, and the only reason the wizard exists.
+ *
+ * Same full-table discipline as `setModelPointers`: every existing entry is mapped through
+ * `toUpdateEntry` and sent back. `apiKey`/`baseUrl` are supplied ONLY on the new entry —
+ * omitting them elsewhere is what preserves the other entries' stored credentials.
+ */
+export async function addCustomModel(
+  projectId: string,
+  entry: {
+    provider: string;
+    modelId: string;
+    displayName?: string;
+    baseUrl: string;
+    apiKey: string;
+    clientType?: string;
+  },
+  opts: { makeDefault?: boolean } = {},
+): Promise<ModelsResponse> {
+  const current = await getModels(projectId);
+  if (current.models.length === 0) {
+    throw new Error("模型列表为空，已中止写入以避免清空配置");
+  }
+  const ref = { provider: entry.provider, modelId: entry.modelId };
+  const added: ModelUpdateEntry = {
+    provider: entry.provider,
+    modelId: entry.modelId,
+    ...(entry.displayName ? { displayName: entry.displayName } : {}),
+    ...(entry.clientType ? { clientType: entry.clientType } : {}),
+    apiKey: entry.apiKey,
+    baseUrl: entry.baseUrl,
+  };
+  // Re-configuring the same reference replaces that entry rather than duplicating it.
+  const kept = current.models.filter((m) => !sameRef(ref, m)).map(toUpdateEntry);
+  return putModels(projectId, {
+    models: [...kept, added],
+    ...(opts.makeDefault ? { defaultModel: ref } : {}),
+  });
+}

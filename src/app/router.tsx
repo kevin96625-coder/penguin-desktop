@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-route
 import { ApiError } from "../api/client";
 import { me } from "../api/endpoints/auth";
 import LoginPage from "../features/auth/LoginPage";
+import OnboardingFlow from "../features/onboarding/OnboardingFlow";
 import BenchmarksPage from "../features/benchmarks/BenchmarksPage";
 import DashboardPage from "../features/dashboard/DashboardPage";
 import OverviewPage from "../features/overview/OverviewPage";
@@ -25,9 +26,17 @@ function UnauthorizedListener() {
   return null;
 }
 
-/** Gate: probe /api/me on mount; 401 redirects to /login before rendering children. */
+/**
+ * Gate: probe /api/me on mount; 401 redirects to /login before rendering children.
+ *
+ * Past the auth check sits the first-run gate: OnboardingFlow decides for itself whether
+ * anything is missing (initial password / no workspace / no model credential) and calls
+ * back immediately when the install is already usable, so a configured machine never sees
+ * it. `setupDone` latches that so finishing the wizard doesn't re-run the probe.
+ */
 function Protected({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
+  const [setupDone, setSetupDone] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     let cancelled = false;
@@ -50,6 +59,7 @@ function Protected({ children }: { children: ReactNode }) {
   }, [navigate]);
   if (!ready)
     return <p className="p-8 text-sm text-muted-foreground">加载中…</p>;
+  if (!setupDone) return <OnboardingFlow onDone={() => setSetupDone(true)} />;
   return <>{children}</>;
 }
 
