@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "../cn";
 
 export type BadgeStatus =
+  | "idle"
   | "queued"
   | "running"
   | "blocked"
@@ -16,6 +17,7 @@ export interface StatusBadgeProps {
 }
 
 const statusLabels: Record<BadgeStatus, string> = {
+  idle: "Idle",
   queued: "Queued",
   running: "Running",
   blocked: "Blocked",
@@ -25,6 +27,14 @@ const statusLabels: Record<BadgeStatus, string> = {
 
 function StatusGlyph({ status }: { status: BadgeStatus }) {
   const shared = "h-2.5 w-2.5 shrink-0 animate-status-glyph";
+
+  if (status === "idle") {
+    return (
+      <svg aria-hidden viewBox="0 0 12 12" className={shared} fill="none">
+        <circle cx="6" cy="6" r="2.25" fill="currentColor" fillOpacity="0.72" />
+      </svg>
+    );
+  }
 
   if (status === "running") {
     return (

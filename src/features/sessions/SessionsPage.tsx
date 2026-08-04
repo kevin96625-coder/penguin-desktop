@@ -19,7 +19,7 @@ import { LogOutIcon } from "../../design-system/icons";
 /** Server session states → badge semantics (idle rests gray, busy states pulse). */
 const statusToBadge: Record<SessionStatus, { badge: BadgeStatus; label: string }> =
   {
-    idle: { badge: "queued", label: "Idle" },
+    idle: { badge: "idle", label: "Idle" },
     running: { badge: "running", label: "Running" },
     compacting: { badge: "running", label: "Compacting" },
   };

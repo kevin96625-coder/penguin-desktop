@@ -22,10 +22,11 @@
    * ---- §7.6 status semantics — stage-3 upgrade ----
    * HSL triplets; use hsl(var(--status-*)) or hsl(var(--status-*) / a).
    * running  → --chat-running (purple), complete → --chat-success,
-   * failed   → --chat-error,  queued   → --muted-foreground,
+   * failed   → --chat-error,  idle / queued → --muted-foreground,
    * blocked  → amber 38 92% 50% (brief-specified; dark uses the existing
    *            tool-search-accent amber 38 90% 66% so no new hue is invented).
    */
+  --status-idle: var(--muted-foreground);
   --status-queued: var(--muted-foreground);
   --status-running: var(--chat-running);
   --status-blocked: 38 92% 50%;

@@ -27,6 +27,41 @@ export function PanelLeftIcon(props: ComponentProps<"svg">) {
   );
 }
 
+export function PanelBottomIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M3 15h18" />
+    </IconBase>
+  );
+}
+
+export function PanelRightIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M15 3v18" />
+    </IconBase>
+  );
+}
+
+export function ChevronDownIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </IconBase>
+  );
+}
+
+export function PencilIcon(props: ComponentProps<"svg">) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+    </IconBase>
+  );
+}
+
 export function SunIcon(props: ComponentProps<"svg">) {
   return (
     <IconBase {...props}>
