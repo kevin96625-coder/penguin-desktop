@@ -61,3 +61,48 @@ export async function request<T>(path: string, init?: RequestInitJson): Promise<
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
 }
+
+/**
+ * Same request pipeline, but the body is read as text.
+ *
+ * Not every endpoint answers JSON: benchmark case files and trace downloads stream raw
+ * bytes with their own Content-Type, so `res.json()` would throw on them. Errors still go
+ * through the JSON envelope, since the server always errors in JSON.
+ */
+export async function requestText(
+  path: string,
+  init?: RequestInitJson,
+): Promise<{ text: string; truncated: boolean }> {
+  const { body, headers, ...rest } = init ?? {};
+  const res = await fetch(path, {
+    ...rest,
+    headers:
+      body !== undefined
+        ? { "Content-Type": "application/json", ...headers }
+        : headers,
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  });
+
+  if (!res.ok) {
+    let code = "http_error";
+    let message = `${res.status} ${res.statusText}`;
+    try {
+      const parsed = (await res.json()) as ErrorBody;
+      if (parsed?.error?.code) {
+        code = parsed.error.code;
+        message = parsed.error.message ?? message;
+      }
+    } catch {
+      // Not the error envelope; keep the status-text fallback.
+    }
+    if (res.status === 401) {
+      window.dispatchEvent(new CustomEvent("penguin:unauthorized"));
+    }
+    throw new ApiError(code, message, res.status);
+  }
+
+  return {
+    text: await res.text(),
+    truncated: res.headers.get("X-Content-Truncated") === "1",
+  };
+}
